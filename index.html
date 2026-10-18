@@ -8,41 +8,41 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080808;color:#fff;font-family:Arial,sans-serif}
-header{padding:22px 16px;text-align:center;border-bottom:1px solid #d4af37}
-header h1{color:#d4af37;margin:0 0 8px}
+header{padding:18px 12px;text-align:center;border-bottom:1px solid #d4af37}
+header h1{color:#d4af37;margin:0 0 6px;font-size:25px}
 header p{margin:5px;color:#ccc}
-main{max-width:800px;margin:auto;padding:18px}
-.card{border:1px solid #6e5922;border-radius:12px;padding:18px;margin-bottom:16px;background:#111}
+main{max-width:800px;margin:auto;padding:16px}
+.card{border:1px solid #6e5922;border-radius:12px;padding:16px;margin-bottom:16px;background:#111}
 h2{color:#e4c65c;margin-top:0}
 label{display:block;color:#e4c65c;margin:12px 0 6px}
 input,select{width:100%;padding:12px;background:#202020;color:white;border:1px solid #665522;border-radius:7px;font-size:16px}
 button{border:0;border-radius:7px;background:#d4af37;color:#080808;padding:12px;font-weight:bold;font-size:15px;cursor:pointer}
-.primary{width:100%;margin-top:16px}
+.primary{width:100%;margin-top:15px}
 .menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
-.menu button{min-height:65px}
+.menu button{min-height:58px}
 .secondary{background:#292929;color:#fff;border:1px solid #8a7029}
 .hidden{display:none!important}
-.item{padding:12px 0;border-bottom:1px solid #444;overflow-wrap:anywhere}
-.item:last-child{border-bottom:0}
+.item{padding:13px 0;border-bottom:1px solid #444;overflow-wrap:anywhere}
 .small{font-size:13px;color:#bbb}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.actions button{padding:9px}
-.danger{background:#a52c2c;color:#fff}
+.danger{background:#a52c2c;color:white}
 </style>
 </head>
 <body>
+
 <header>
-<h1>SV GROUP</h1>
-<p>School Management System</p>
+  <h1 id="topTitle">SV GROUP</h1>
+  <p id="topSubtitle">School Management System</p>
 </header>
+
 <main>
 <section id="setup" class="card hidden">
 <h2>School Setup</h2>
 <form id="schoolForm">
-<label>School Name</label>
-<input id="schoolName" required>
+<label>School / College Name</label>
+<input id="schoolName" required maxlength="150">
 <label>Principal Name</label>
-<input id="principalName" required>
+<input id="principalName" required maxlength="100">
 <button class="primary">Save School Details</button>
 </form>
 </section>
@@ -54,10 +54,9 @@ button{border:0;border-radius:7px;background:#d4af37;color:#080808;padding:12px;
 <p>कुल विद्यार्थी: <strong id="studentCount">0</strong></p>
 </div>
 <div class="menu">
-<button onclick="openStudents()">👨‍🎓 Students</button>
+<button onclick="openStudents()">👨‍🎓 Students & Fees</button>
 <button onclick="comingSoon('Teachers')">👩‍🏫 Teachers</button>
 <button onclick="comingSoon('Attendance')">📅 Attendance</button>
-<button onclick="comingSoon('Fees')">💰 Fees</button>
 <button onclick="comingSoon('Exams & Results')">📝 Results</button>
 <button onclick="comingSoon('Homework')">📚 Homework</button>
 <button onclick="comingSoon('Time Table')">🕒 Time Table</button>
@@ -68,316 +67,269 @@ button{border:0;border-radius:7px;background:#d4af37;color:#080808;padding:12px;
 
 <section id="students" class="hidden">
 <button class="secondary" onclick="showDashboard()">← Dashboard</button>
+
 <div class="card" style="margin-top:15px">
-<h2>Add Student</h2>
+<h2>नया विद्यार्थी जोड़ें</h2>
 <form id="studentForm">
-<label>Student Name *</label>
-<input id="sname" required maxlength="100" placeholder="विद्यार्थी का पूरा नाम">
-<label>Class *</label>
+<label>विद्यार्थी का पूरा नाम *</label>
+<input id="sname" required maxlength="100">
+<label>कक्षा *</label>
 <select id="sclass" required>
 <option value="">कक्षा चुनें</option>
-<option>6</option><option>7</option><option>8</option>
-<option>9</option><option>10</option><option>11</option><option>12</option>
+<option>1</option><option>2</option><option>3</option>
+<option>4</option><option>5</option><option>6</option>
+<option>7</option><option>8</option><option>9</option>
+<option>10</option><option>11</option><option>12</option>
 </select>
-<label>Roll Number *</label>
-<input id="roll" required maxlength="20" placeholder="रोल नंबर">
-<label>Father / Guardian Name</label>
-<input id="guardian" maxlength="100" placeholder="अभिभावक का नाम">
-<label>Contact Number</label>
-<input id="phone" type="tel" inputmode="numeric" maxlength="15" placeholder="मोबाइल नंबर">
-<button class="primary">Save Student</button>
+<label>रोल नंबर *</label>
+<input id="roll" required maxlength="30">
+<label>Admission Number (अलग होना चाहिए) *</label>
+<input id="admission" required maxlength="50">
+<label>पिता / अभिभावक का नाम</label>
+<input id="guardian" maxlength="100">
+<label>मोबाइल नंबर</label>
+<input id="phone" type="tel" maxlength="15">
+<label>कुल फीस (₹) *</label>
+<input id="totalFee" type="number" min="0" step="0.01" required>
+<label>अब तक जमा फीस (₹) *</label>
+<input id="paidFee" type="number" min="0" step="0.01" value="0" required>
+<button class="primary">विद्यार्थी सेव करें</button>
 </form>
 </div>
+
 <div class="card">
-<h2>Student Records</h2>
-<input id="search" placeholder="नाम, कक्षा या रोल नंबर खोजें">
+<h2>विद्यार्थी खोजें</h2>
+<input id="search" placeholder="नाम, कक्षा, रोल या Admission Number">
 <div id="studentList"></div>
 <p id="empty" class="small">अभी कोई विद्यार्थी नहीं जोड़ा गया है।</p>
 </div>
 </section>
 </main>
-<script>
-const $=id=>document.getElementById(id);
-const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
-let students=read("svSchoolStudents",[]);
-if(!Array.isArray(students)) students=[];
-function show(id){
-["setup","dashboard","students"].forEach(x=>$(x).classList.add("hidden"));
-$(id).classList.remove("hidden");
-}
-function init(){
-const school=localStorage.getItem("svSchoolName");
-const principal=localStorage.getItem("svPrincipalName");
-if(school&&principal){
-$("welcome").textContent=school;
-$("principal").textContent="Principal: "+principal;
-show("dashboard");
-}else{
-$("schoolName").value=school||"";
-$("principalName").value=principal||"";
-show("setup");
-}
-updateCount();
-}
-$("schoolForm").addEventListener("submit",e=>{
-e.preventDefault();
-localStorage.setItem("svSchoolName",$("schoolName").value.trim());
-localStorage.setItem("svPrincipalName",$("principalName").value.trim());
-init();
-});
-function editSchool(){
-$("schoolName").value=localStorage.getItem("svSchoolName")||"";
-$("principalName").value=localStorage.getItem("svPrincipalName")||"";
-show("setup");
-}
-function showDashboard(){show("dashboard");updateCount()}
-function openStudents(){show("students");renderStudents()}
-function comingSoon(name){alert(name+" मॉड्यूल अभी बनाना बाकी है।")}
-function saveStudents(){
-localStorage.setItem("svSchoolStudents",JSON.stringify(students));
-}
-function updateCount(){$("studentCount").textContent=students.length}
-$("studentForm").addEventListener("submit",e=>{
-e.preventDefault();
-const student={
-id:Date.now().toString()+Math.random().toString(36).slice(2,7),
-name:$("sname").value.trim(),
-cls:$("sclass").value,
-roll:$("roll").value.trim(),
-guardian:$("guardian").value.trim(),
-phone:$("phone").value.trim()
-};
-if(!student.name||!student.cls||!student.roll)return;
-const duplicate=students.some(s=>s.cls===student.cls&&s.roll.toLowerCase()===student.roll.toLowerCase());
-if(duplicate){alert("इस कक्षा में यह रोल नंबर पहले से मौजूद है।");return}
-students.push(student);
-saveStudents();
-$("studentForm").reset();
-renderStudents();
-updateCount();
-alert("विद्यार्थी सफलतापूर्वक सेव हो गया!");
-});
-$("search").addEventListener("input",renderStudents);
-function renderStudents(){
-const q=$("search").value.trim().toLowerCase();
-const list=$("studentList");
-list.replaceChildren();
-const filtered=students.filter(s=>
-[s.name,s.cls,s.roll,s.guardian,s.phone].some(v=>(v||"").toLowerCase().includes(q))
-);
-$("empty").classList.toggle("hidden",filtered.length>0);
-if(filtered.length===0){
-$("empty").textContent=students.length?"कोई मिलान वाला रिकॉर्ड नहीं मिला।":"अभी कोई विद्यार्थी नहीं जोड़ा गया है।";
-}
-filtered.forEach(s=>{
-const item=document.createElement("div");
-item.className="item";
-const title=document.createElement("strong");
-title.textContent=s.name;
-const detail=document.createElement("p");
-detail.className="small";
-detail.textContent="कक्षा: "+s.cls+" | रोल नंबर: "+s.roll+
-(s.guardian?" | अभिभावक: "+s.guardian:"")+
-(s.phone?" | संपर्क: "+s.phone:"");
-const actions=document.createElement("div");
-actions.className="actions";
-const del=document.createElement("button");
-del.className="danger";
-del.textContent="Delete";
-del.addEventListener("click",()=>{
-if(confirm("क्या इस विद्यार्थी का रिकॉर्ड हटाना चाहते हैं?")){
-students=students.filter(x=>x.id!==s.id);
-saveStudents();renderStudents();updateCount();
-}
-});
-actions.appendChild(del);
-item.append(title,detail,actions);
-list.appendChild(item);
-});
-}
-init();
-</script>
-  
-
-<!-- SV GROUP Student & Fee Manager -->
-<section id="sv-fee-app" style="max-width:650px;margin:25px auto;padding:18px;background:#111;color:white;border:2px solid #d4af37;border-radius:14px;font-family:Arial,sans-serif;box-sizing:border-box;">
-  <h2 style="color:#ffe58a;text-align:center;">SV GROUP</h2>
-  <h3 style="text-align:center;">Student & Fee Manager</h3>
-
-  <p style="color:#ffe58a;">नया विद्यार्थी जोड़ें</p>
-  <form id="sv-student-form">
-    <input id="sv-name" required maxlength="100" placeholder="विद्यार्थी का पूरा नाम" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
-    <input id="sv-father" required maxlength="100" placeholder="पिता/माता का नाम" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
-    <div style="display:flex;gap:8px;">
-      <input id="sv-class" required maxlength="30" placeholder="कक्षा" style="width:50%;min-width:0;padding:12px;margin:5px 0;">
-      <input id="sv-roll" required maxlength="30" placeholder="रोल नंबर" style="width:50%;min-width:0;padding:12px;margin:5px 0;">
-    </div>
-    <input id="sv-admission" required maxlength="50" placeholder="Admission Number (अलग होना चाहिए)" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
-    <input id="sv-total" required type="number" min="0" step="0.01" placeholder="कुल फीस ₹" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
-    <input id="sv-paid" required type="number" min="0" step="0.01" value="0" placeholder="अब तक जमा फीस ₹" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
-    <button type="submit" style="width:100%;padding:13px;margin-top:10px;background:#d4af37;color:#111;border:0;border-radius:7px;font-weight:bold;">विद्यार्थी सेव करें</button>
-  </form>
-
-  <hr style="border-color:#d4af37;margin:22px 0;">
-  <h3 style="color:#ffe58a;">विद्यार्थी और फीस खोजें</h3>
-  <input id="sv-search" type="search" placeholder="नाम, पिता का नाम या Admission No." style="width:100%;box-sizing:border-box;padding:13px;">
-  <p id="sv-count">कुल विद्यार्थी: 0</p>
-  <div id="sv-results"></div>
-  <p style="font-size:12px;color:#ccc;">रिकॉर्ड इसी ब्राउज़र में सेव होते हैं। डेटा मिटाने से रिकॉर्ड खो सकते हैं।</p>
-</section>
 
 <script>
-(function () {
-  const KEY = "sv_group_students_fees_v1";
-  const byId = id => document.getElementById(id);
-  let students = [];
-
+const $ = id => document.getElementById(id);
+const read = (key, fallback) => {
   try {
-    students = JSON.parse(localStorage.getItem(KEY) || "[]");
-    if (!Array.isArray(students)) students = [];
+    const value = JSON.parse(localStorage.getItem(key));
+    return value ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+/* पुराने विद्यार्थी रिकॉर्ड इसी कुंजी से पढ़े जाते हैं */
+let students = read("svSchoolStudents", []);
+if (!Array.isArray(students)) students = [];
+
+/* पुराने रिकॉर्ड में नई फीस की जानकारी जोड़ें */
+students = students.map(s => ({
+  ...s,
+  admission: s.admission || ("OLD-" + (s.id || Math.random().toString(36).slice(2))),
+  totalFee: Number(s.totalFee ?? 0),
+  paidFee: Number(s.paidFee ?? 0)
+}));
+
+function saveStudents() {
+  try {
+    localStorage.setItem("svSchoolStudents", JSON.stringify(students));
+    return true;
   } catch (e) {
-    students = [];
+    alert("रिकॉर्ड सेव नहीं हुआ। ब्राउज़र स्टोरेज जाँचें।");
+    return false;
+  }
+}
+
+function show(id) {
+  ["setup", "dashboard", "students"].forEach(x =>
+    $(x).classList.add("hidden")
+  );
+  $(id).classList.remove("hidden");
+
+  const school = localStorage.getItem("svSchoolName") || "";
+  if (id === "setup") {
+    $("topTitle").textContent = "SV GROUP";
+    $("topSubtitle").textContent = "School Management System";
+  } else {
+    $("topTitle").textContent = school || "School";
+    $("topSubtitle").textContent = "School Management System";
+  }
+}
+
+function init() {
+  const school = localStorage.getItem("svSchoolName");
+  const principal = localStorage.getItem("svPrincipalName");
+
+  if (school && principal) {
+    $("welcome").textContent = "Welcome to " + school;
+    $("principal").textContent = "Principal: " + principal;
+    show("dashboard");
+  } else {
+    $("schoolName").value = school || "";
+    $("principalName").value = principal || "";
+    show("setup");
+  }
+  updateCount();
+}
+
+$("schoolForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const school = $("schoolName").value.trim();
+  const principal = $("principalName").value.trim();
+  if (!school || !principal) return;
+
+  localStorage.setItem("svSchoolName", school);
+  localStorage.setItem("svPrincipalName", principal);
+  init();
+});
+
+function editSchool() {
+  $("schoolName").value = localStorage.getItem("svSchoolName") || "";
+  $("principalName").value = localStorage.getItem("svPrincipalName") || "";
+  show("setup");
+}
+
+function showDashboard() {
+  show("dashboard");
+  updateCount();
+}
+
+function openStudents() {
+  show("students");
+  renderStudents();
+}
+
+function comingSoon(name) {
+  alert(name + " मॉड्यूल अभी बनाना बाकी है।");
+}
+
+function updateCount() {
+  $("studentCount").textContent = students.length;
+}
+
+$("studentForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const totalFee = Number($("totalFee").value);
+  const paidFee = Number($("paidFee").value);
+
+  if (!Number.isFinite(totalFee) || !Number.isFinite(paidFee) ||
+      totalFee < 0 || paidFee < 0 || paidFee > totalFee) {
+    alert("जमा फीस 0 से कुल फीस तक होनी चाहिए।");
+    return;
   }
 
-  function saveData() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(students));
-      return true;
-    } catch (e) {
-      alert("डेटा सेव नहीं हुआ। ब्राउज़र की स्टोरेज जाँचें।");
-      return false;
-    }
+  const admission = $("admission").value.trim();
+  if (students.some(s =>
+      String(s.admission).toLowerCase() === admission.toLowerCase())) {
+    alert("यह Admission Number पहले से मौजूद है।");
+    return;
   }
 
-  function addText(parent, tag, value, style) {
-    const el = document.createElement(tag);
-    el.textContent = value;
-    if (style) el.style.cssText = style;
-    parent.appendChild(el);
-    return el;
-  }
-
-  function render() {
-    const q = byId("sv-search").value.trim().toLowerCase();
-    const results = byId("sv-results");
-    results.replaceChildren();
-
-    const found = students.filter(s =>
-      [s.name, s.father, s.className, s.roll, s.admission]
-        .some(v => String(v).toLowerCase().includes(q))
-    );
-
-    byId("sv-count").textContent =
-      "कुल विद्यार्थी: " + students.length +
-      " | खोज में मिले: " + found.length;
-
-    if (!found.length) {
-      addText(results, "p",
-        q ? "कोई विद्यार्थी नहीं मिला।" : "अभी कोई विद्यार्थी नहीं जोड़ा गया।");
-      return;
-    }
-
-    found.forEach(s => {
-      const card = document.createElement("div");
-      card.style.cssText =
-        "margin:12px 0;padding:14px;border:1px solid #d4af37;border-radius:9px;background:#222;";
-
-      addText(card, "h3", s.name, "color:#ffe58a;margin-top:0;");
-      addText(card, "p", "पिता/माता: " + s.father);
-      addText(card, "p", "कक्षा: " + s.className + " | रोल: " + s.roll);
-      addText(card, "p", "Admission No.: " + s.admission);
-      addText(card, "p", "कुल फीस: ₹" + s.total);
-      addText(card, "p", "जमा फीस: ₹" + s.paid);
-      addText(card, "p", "बाकी फीस: ₹" + (s.total - s.paid).toFixed(2),
-        "color:#ffe58a;font-weight:bold;");
-
-      addText(card, "label", "नई कुल जमा फीस (₹)");
-      const paidInput = document.createElement("input");
-      paidInput.type = "number";
-      paidInput.min = "0";
-      paidInput.max = String(s.total);
-      paidInput.step = "0.01";
-      paidInput.value = s.paid;
-      paidInput.style.cssText =
-        "display:block;width:100%;box-sizing:border-box;padding:10px;margin:8px 0;";
-      card.appendChild(paidInput);
-
-      const update = document.createElement("button");
-      update.type = "button";
-      update.textContent = "जमा फीस अपडेट करें";
-      update.style.cssText =
-        "padding:11px;background:#d4af37;border:0;border-radius:6px;font-weight:bold;";
-      update.addEventListener("click", function () {
-        const value = paidInput.valueAsNumber;
-        if (paidInput.value === "" || !Number.isFinite(value) ||
-            value < 0 || value > s.total) {
-          alert("जमा फीस 0 से कुल फीस तक दर्ज करें।");
-          return;
-        }
-        const index = students.findIndex(x => x.admission === s.admission);
-        if (index < 0) return;
-        const oldPaid = students[index].paid;
-        students[index].paid = Math.round(value * 100) / 100;
-        if (saveData()) {
-          render();
-          alert("फीस रिकॉर्ड सेव हो गया।");
-        } else {
-          students[index].paid = oldPaid;
-        }
-      });
-      card.appendChild(update);
-      results.appendChild(card);
-    });
-  }
-
-  byId("sv-student-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const name = byId("sv-name").value.trim();
-    const father = byId("sv-father").value.trim();
-    const className = byId("sv-class").value.trim();
-    const roll = byId("sv-roll").value.trim();
-    const admission = byId("sv-admission").value.trim();
-    const total = byId("sv-total").valueAsNumber;
-    const paid = byId("sv-paid").valueAsNumber;
-
-    if (!name || !father || !className || !roll || !admission ||
-        byId("sv-total").value === "" || byId("sv-paid").value === "" ||
-        !Number.isFinite(total) || !Number.isFinite(paid) ||
-        total < 0 || paid < 0 || paid > total) {
-      alert("सभी जानकारी सही भरें। जमा फीस कुल फीस से अधिक नहीं हो सकती।");
-      return;
-    }
-
-    if (students.some(s =>
-      s.admission.toLowerCase() === admission.toLowerCase())) {
-      alert("यह Admission Number पहले से मौजूद है।");
-      return;
-    }
-
-    const student = {
-      name, father, className, roll, admission,
-      total: Math.round(total * 100) / 100,
-      paid: Math.round(paid * 100) / 100
-    };
-
-    students.push(student);
-    if (!saveData()) {
-      students.pop();
-      return;
-    }
-
-    this.reset();
-    byId("sv-search").value = admission;
-    render();
-    alert("विद्यार्थी का रिकॉर्ड सेव हो गया।");
+  students.push({
+    id: Date.now().toString() + Math.random().toString(36).slice(2,7),
+    name: $("sname").value.trim(),
+    cls: $("sclass").value,
+    roll: $("roll").value.trim(),
+    admission,
+    guardian: $("guardian").value.trim(),
+    phone: $("phone").value.trim(),
+    totalFee: Math.round(totalFee * 100) / 100,
+    paidFee: Math.round(paidFee * 100) / 100
   });
 
-  byId("sv-search").addEventListener("input", render);
-  render();
-})();
+  if (!saveStudents()) {
+    students.pop();
+    return;
+  }
+
+  $("studentForm").reset();
+  $("paidFee").value = "0";
+  $("search").value = admission;
+  renderStudents();
+  updateCount();
+  alert("विद्यार्थी और फीस रिकॉर्ड सेव हो गया!");
+});
+
+$("search").addEventListener("input", renderStudents);
+
+function renderStudents() {
+  const q = $("search").value.trim().toLowerCase();
+  const list = $("studentList");
+  list.replaceChildren();
+
+  const filtered = students.filter(s =>
+    [s.name, s.cls, s.roll, s.guardian, s.phone, s.admission]
+      .some(v => String(v || "").toLowerCase().includes(q))
+  );
+
+  $("empty").classList.toggle("hidden", filtered.length > 0);
+  $("empty").textContent = students.length
+    ? "कोई मिलान वाला रिकॉर्ड नहीं मिला।"
+    : "अभी कोई विद्यार्थी नहीं जोड़ा गया है।";
+
+  filtered.forEach(s => {
+    const item = document.createElement("div");
+    item.className = "item";
+
+    const title = document.createElement("h3");
+    title.style.color = "#ffe58a";
+    title.textContent = s.name;
+
+    const detail = document.createElement("p");
+    detail.className = "small";
+    detail.textContent =
+      "कक्षा: " + s.cls + " | रोल: " + s.roll +
+      " | Admission No.: " + s.admission +
+      (s.guardian ? " | अभिभावक: " + s.guardian : "");
+
+    const fees = document.createElement("p");
+    fees.textContent =
+      "कुल फीस: ₹" + s.totalFee.toFixed(2) +
+      " | जमा: ₹" + s.paidFee.toFixed(2) +
+      " | बाकी: ₹" + (s.totalFee - s.paidFee).toFixed(2);
+
+    const label = document.createElement("label");
+    label.textContent = "नई कुल जमा फीस (₹)";
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "0";
+    input.max = String(s.totalFee);
+    input.step = "0.01";
+    input.value = s.paidFee;
+
+    const update = document.createElement("button");
+    update.textContent = "फीस अपडेट करें";
+    update.style.marginTop = "10px";
+
+    update.addEventListener("click", () => {
+      const value = input.valueAsNumber;
+      if (input.value === "" || !Number.isFinite(value) ||
+          value < 0 || value > s.totalFee) {
+        alert("सही फीस दर्ज करें।");
+        return;
+      }
+
+      const index = students.findIndex(x => x.id === s.id);
+      if (index < 0) return;
+
+      const previous = students[index].paidFee;
+      students[index].paidFee = Math.round(value * 100) / 100;
+
+      if (saveStudents()) {
+        renderStudents();
+        alert("फीस रिकॉर्ड अपडेट हो गया।");
+      } else {
+        students[index].paidFee = previous;
+      }
+    });
+
+    item.append(title, detail, fees, label, input, update);
+    list.appendChild(item);
+  });
+}
+
+init();
 </script>
-
-
 </body>
 </html>
