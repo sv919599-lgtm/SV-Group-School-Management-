@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SV GROUP School Management System</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080808;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      border: 1px solid #d4af37;
+      border-radius: 18px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 0 25px #d4af3720;
+    }
+    h1 { color: #d4af37; font-size: 27px; }
+    .subtitle { color: #ddd; margin-bottom: 28px; }
+    label {
+      display: block;
+      text-align: left;
+      margin: 16px 0 7px;
+      color: #f0d675;
+    }
+    input {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid #806b2b;
+      background: #171717;
+      color: white;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: 0;
+      border-radius: 8px;
+      background: #d4af37;
+      color: #080808;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .info {
+      background: #171717;
+      border: 1px solid #806b2b;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 12px;
+    }
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .menu div {
+      background: #171717;
+      border: 1px solid #806b2b;
+      border-radius: 9px;
+      padding: 16px 5px;
+    }
+    .note { color: #aaa; font-size: 12px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <main class="card" id="setup">
+    <h1>Welcome to SV GROUP</h1>
+    <h2>School Management System</h2>
+    <p class="subtitle">Complete School Administration</p>
+
+    <form id="schoolForm">
+      <label for="schoolName">School Name</label>
+      <input id="schoolName" required
+        placeholder="Enter School Name">
+
+      <label for="principalName">Principal Name</label>
+      <input id="principalName" required
+        placeholder="Enter Principal Name">
+
+      <button type="submit">CONTINUE TO SCHOOL SYSTEM →</button>
+    </form>
+    <p class="note">SV GROUP • School Management</p>
+  </main>
+
+  <main class="card hidden" id="dashboard">
+    <h1>SV GROUP</h1>
+    <h2 id="displaySchool"></h2>
+    <p>Principal: <span id="displayPrincipal"></span></p>
+    <h2>School Dashboard</h2>
+
+    <div class="menu">
+      <div>👨‍🎓<br>Students</div>
+      <div>👩‍🏫<br>Teachers</div>
+      <div>📅<br>Attendance</div>
+      <div>💰<br>Fees</div>
+      <div>📝<br>Exams & Results</div>
+      <div>📚<br>Homework</div>
+      <div>🕒<br>Time Table</div>
+      <div>📊<br>Reports</div>
+    </div>
+    <p class="note">यह शुरुआती डेमो है। अभी रिकॉर्ड सेव करने वाले मॉड्यूल नहीं जुड़े हैं।</p>
+    <button id="editButton">Edit School Details</button>
+  </main>
+
+  <script>
+    const setup = document.getElementById("setup");
+    const dashboard = document.getElementById("dashboard");
+
+    function showSchool() {
+      const school = localStorage.getItem("svSchoolName");
+      const principal = localStorage.getItem("svPrincipalName");
+
+      if (school && principal) {
+        document.getElementById("displaySchool").textContent = school;
+        document.getElementById("displayPrincipal").textContent = principal;
+        setup.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+      } else {
+        setup.classList.remove("hidden");
+        dashboard.classList.add("hidden");
+      }
+    }
+
+    document.getElementById("schoolForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const school = document.getElementById("schoolName").value.trim();
+      const principal = document.getElementById("principalName").value.trim();
+
+      if (!school || !principal) return;
+
+      localStorage.setItem("svSchoolName", school);
+      localStorage.setItem("svPrincipalName", principal);
+      showSchool();
+    });
+
+    document.getElementById("editButton").addEventListener("click", function() {
+      document.getElementById("schoolName").value =
+        localStorage.getItem("svSchoolName") || "";
+      document.getElementById("principalName").value =
+        localStorage.getItem("svPrincipalName") || "";
+      setup.classList.remove("hidden");
+      dashboard.classList.add("hidden");
+    });
+
+    showSchool();
+  </script>
+</body>
+</html>
