@@ -198,61 +198,186 @@ list.appendChild(item);
 init();
 </script>
   
-<!-- SV GROUP Student Fee Search -->
-<div id="sv-fee-search" style="max-width:600px;margin:25px auto;padding:18px;background:#111;color:#fff;border:2px solid #d4af37;border-radius:14px;font-family:Arial,sans-serif;">
-  <h2 style="color:#ffe58a;text-align:center;">Student Fee Search</h2>
-  <input id="sv-search-name" type="text" placeholder="Bachche ka naam likhein..."
-    oninput="svSearchStudent()"
-    style="width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:1px solid #d4af37;font-size:16px;">
-  <div id="sv-search-results" style="margin-top:15px;"></div>
-</div>
+
+<!-- SV GROUP Student & Fee Manager -->
+<section id="sv-fee-app" style="max-width:650px;margin:25px auto;padding:18px;background:#111;color:white;border:2px solid #d4af37;border-radius:14px;font-family:Arial,sans-serif;box-sizing:border-box;">
+  <h2 style="color:#ffe58a;text-align:center;">SV GROUP</h2>
+  <h3 style="text-align:center;">Student & Fee Manager</h3>
+
+  <p style="color:#ffe58a;">नया विद्यार्थी जोड़ें</p>
+  <form id="sv-student-form">
+    <input id="sv-name" required maxlength="100" placeholder="विद्यार्थी का पूरा नाम" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
+    <input id="sv-father" required maxlength="100" placeholder="पिता/माता का नाम" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
+    <div style="display:flex;gap:8px;">
+      <input id="sv-class" required maxlength="30" placeholder="कक्षा" style="width:50%;min-width:0;padding:12px;margin:5px 0;">
+      <input id="sv-roll" required maxlength="30" placeholder="रोल नंबर" style="width:50%;min-width:0;padding:12px;margin:5px 0;">
+    </div>
+    <input id="sv-admission" required maxlength="50" placeholder="Admission Number (अलग होना चाहिए)" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
+    <input id="sv-total" required type="number" min="0" step="0.01" placeholder="कुल फीस ₹" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
+    <input id="sv-paid" required type="number" min="0" step="0.01" value="0" placeholder="अब तक जमा फीस ₹" style="width:100%;box-sizing:border-box;padding:12px;margin:5px 0;">
+    <button type="submit" style="width:100%;padding:13px;margin-top:10px;background:#d4af37;color:#111;border:0;border-radius:7px;font-weight:bold;">विद्यार्थी सेव करें</button>
+  </form>
+
+  <hr style="border-color:#d4af37;margin:22px 0;">
+  <h3 style="color:#ffe58a;">विद्यार्थी और फीस खोजें</h3>
+  <input id="sv-search" type="search" placeholder="नाम, पिता का नाम या Admission No." style="width:100%;box-sizing:border-box;padding:13px;">
+  <p id="sv-count">कुल विद्यार्थी: 0</p>
+  <div id="sv-results"></div>
+  <p style="font-size:12px;color:#ccc;">रिकॉर्ड इसी ब्राउज़र में सेव होते हैं। डेटा मिटाने से रिकॉर्ड खो सकते हैं।</p>
+</section>
 
 <script>
-/* Demo student data: baad mein school ke asli records jodenge */
-const svStudents = [
-  {name:"Shiva Kumar", className:"5", roll:"12", total:5000, paid:4000},
-  {name:"Shiva Yadav", className:"7", roll:"8", total:6000, paid:5500},
-  {name:"Shivam Singh", className:"6", roll:"15", total:5500, paid:3000}
-];
+(function () {
+  const KEY = "sv_group_students_fees_v1";
+  const byId = id => document.getElementById(id);
+  let students = [];
 
-function svSearchStudent() {
-  const query = document.getElementById("sv-search-name").value.trim().toLowerCase();
-  const results = document.getElementById("sv-search-results");
-
-  if (!query) {
-    results.innerHTML = "";
-    return;
+  try {
+    students = JSON.parse(localStorage.getItem(KEY) || "[]");
+    if (!Array.isArray(students)) students = [];
+  } catch (e) {
+    students = [];
   }
 
-  const matches = svStudents.filter(s => s.name.toLowerCase().includes(query));
-
-  if (!matches.length) {
-    results.textContent = "Koi student nahi mila.";
-    return;
+  function saveData() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(students));
+      return true;
+    } catch (e) {
+      alert("डेटा सेव नहीं हुआ। ब्राउज़र की स्टोरेज जाँचें।");
+      return false;
+    }
   }
 
-  results.replaceChildren();
+  function addText(parent, tag, value, style) {
+    const el = document.createElement(tag);
+    el.textContent = value;
+    if (style) el.style.cssText = style;
+    parent.appendChild(el);
+    return el;
+  }
 
-  matches.forEach(s => {
-    const card = document.createElement("div");
-    card.style.cssText = "padding:12px;margin-top:10px;background:#222;border:1px solid #d4af37;border-radius:8px;";
+  function render() {
+    const q = byId("sv-search").value.trim().toLowerCase();
+    const results = byId("sv-results");
+    results.replaceChildren();
 
-    const title = document.createElement("h3");
-    title.style.color = "#ffe58a";
-    title.textContent = s.name;
+    const found = students.filter(s =>
+      [s.name, s.father, s.className, s.roll, s.admission]
+        .some(v => String(v).toLowerCase().includes(q))
+    );
 
-    const details = document.createElement("p");
-    details.textContent = "Class: " + s.className + " | Roll No: " + s.roll;
+    byId("sv-count").textContent =
+      "कुल विद्यार्थी: " + students.length +
+      " | खोज में मिले: " + found.length;
 
-    const fee = document.createElement("p");
-    fee.textContent = "Total Fee: ₹" + s.total +
-      " | Paid: ₹" + s.paid + " | Due: ₹" + (s.total - s.paid);
+    if (!found.length) {
+      addText(results, "p",
+        q ? "कोई विद्यार्थी नहीं मिला।" : "अभी कोई विद्यार्थी नहीं जोड़ा गया।");
+      return;
+    }
 
-    card.append(title, details, fee);
-    results.appendChild(card);
+    found.forEach(s => {
+      const card = document.createElement("div");
+      card.style.cssText =
+        "margin:12px 0;padding:14px;border:1px solid #d4af37;border-radius:9px;background:#222;";
+
+      addText(card, "h3", s.name, "color:#ffe58a;margin-top:0;");
+      addText(card, "p", "पिता/माता: " + s.father);
+      addText(card, "p", "कक्षा: " + s.className + " | रोल: " + s.roll);
+      addText(card, "p", "Admission No.: " + s.admission);
+      addText(card, "p", "कुल फीस: ₹" + s.total);
+      addText(card, "p", "जमा फीस: ₹" + s.paid);
+      addText(card, "p", "बाकी फीस: ₹" + (s.total - s.paid).toFixed(2),
+        "color:#ffe58a;font-weight:bold;");
+
+      addText(card, "label", "नई कुल जमा फीस (₹)");
+      const paidInput = document.createElement("input");
+      paidInput.type = "number";
+      paidInput.min = "0";
+      paidInput.max = String(s.total);
+      paidInput.step = "0.01";
+      paidInput.value = s.paid;
+      paidInput.style.cssText =
+        "display:block;width:100%;box-sizing:border-box;padding:10px;margin:8px 0;";
+      card.appendChild(paidInput);
+
+      const update = document.createElement("button");
+      update.type = "button";
+      update.textContent = "जमा फीस अपडेट करें";
+      update.style.cssText =
+        "padding:11px;background:#d4af37;border:0;border-radius:6px;font-weight:bold;";
+      update.addEventListener("click", function () {
+        const value = paidInput.valueAsNumber;
+        if (paidInput.value === "" || !Number.isFinite(value) ||
+            value < 0 || value > s.total) {
+          alert("जमा फीस 0 से कुल फीस तक दर्ज करें।");
+          return;
+        }
+        const index = students.findIndex(x => x.admission === s.admission);
+        if (index < 0) return;
+        const oldPaid = students[index].paid;
+        students[index].paid = Math.round(value * 100) / 100;
+        if (saveData()) {
+          render();
+          alert("फीस रिकॉर्ड सेव हो गया।");
+        } else {
+          students[index].paid = oldPaid;
+        }
+      });
+      card.appendChild(update);
+      results.appendChild(card);
+    });
+  }
+
+  byId("sv-student-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const name = byId("sv-name").value.trim();
+    const father = byId("sv-father").value.trim();
+    const className = byId("sv-class").value.trim();
+    const roll = byId("sv-roll").value.trim();
+    const admission = byId("sv-admission").value.trim();
+    const total = byId("sv-total").valueAsNumber;
+    const paid = byId("sv-paid").valueAsNumber;
+
+    if (!name || !father || !className || !roll || !admission ||
+        byId("sv-total").value === "" || byId("sv-paid").value === "" ||
+        !Number.isFinite(total) || !Number.isFinite(paid) ||
+        total < 0 || paid < 0 || paid > total) {
+      alert("सभी जानकारी सही भरें। जमा फीस कुल फीस से अधिक नहीं हो सकती।");
+      return;
+    }
+
+    if (students.some(s =>
+      s.admission.toLowerCase() === admission.toLowerCase())) {
+      alert("यह Admission Number पहले से मौजूद है।");
+      return;
+    }
+
+    const student = {
+      name, father, className, roll, admission,
+      total: Math.round(total * 100) / 100,
+      paid: Math.round(paid * 100) / 100
+    };
+
+    students.push(student);
+    if (!saveData()) {
+      students.pop();
+      return;
+    }
+
+    this.reset();
+    byId("sv-search").value = admission;
+    render();
+    alert("विद्यार्थी का रिकॉर्ड सेव हो गया।");
   });
-}
+
+  byId("sv-search").addEventListener("input", render);
+  render();
+})();
 </script>
+
 
 </body>
 </html>
