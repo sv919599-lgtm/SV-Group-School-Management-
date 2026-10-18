@@ -197,5 +197,62 @@ list.appendChild(item);
 }
 init();
 </script>
+  
+<!-- SV GROUP Student Fee Search -->
+<div id="sv-fee-search" style="max-width:600px;margin:25px auto;padding:18px;background:#111;color:#fff;border:2px solid #d4af37;border-radius:14px;font-family:Arial,sans-serif;">
+  <h2 style="color:#ffe58a;text-align:center;">Student Fee Search</h2>
+  <input id="sv-search-name" type="text" placeholder="Bachche ka naam likhein..."
+    oninput="svSearchStudent()"
+    style="width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:1px solid #d4af37;font-size:16px;">
+  <div id="sv-search-results" style="margin-top:15px;"></div>
+</div>
+
+<script>
+/* Demo student data: baad mein school ke asli records jodenge */
+const svStudents = [
+  {name:"Shiva Kumar", className:"5", roll:"12", total:5000, paid:4000},
+  {name:"Shiva Yadav", className:"7", roll:"8", total:6000, paid:5500},
+  {name:"Shivam Singh", className:"6", roll:"15", total:5500, paid:3000}
+];
+
+function svSearchStudent() {
+  const query = document.getElementById("sv-search-name").value.trim().toLowerCase();
+  const results = document.getElementById("sv-search-results");
+
+  if (!query) {
+    results.innerHTML = "";
+    return;
+  }
+
+  const matches = svStudents.filter(s => s.name.toLowerCase().includes(query));
+
+  if (!matches.length) {
+    results.textContent = "Koi student nahi mila.";
+    return;
+  }
+
+  results.replaceChildren();
+
+  matches.forEach(s => {
+    const card = document.createElement("div");
+    card.style.cssText = "padding:12px;margin-top:10px;background:#222;border:1px solid #d4af37;border-radius:8px;";
+
+    const title = document.createElement("h3");
+    title.style.color = "#ffe58a";
+    title.textContent = s.name;
+
+    const details = document.createElement("p");
+    details.textContent = "Class: " + s.className + " | Roll No: " + s.roll;
+
+    const fee = document.createElement("p");
+    fee.textContent = "Total Fee: ₹" + s.total +
+      " | Paid: ₹" + s.paid + " | Due: ₹" + (s.total - s.paid);
+
+    card.append(title, details, fee);
+    results.appendChild(card);
+  });
+}
+</script>
+
 </body>
 </html>
