@@ -2,165 +2,200 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SV GROUP School Management System</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #080808;
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .card {
-      width: 100%;
-      max-width: 440px;
-      border: 1px solid #d4af37;
-      border-radius: 18px;
-      padding: 28px 22px;
-      text-align: center;
-      box-shadow: 0 0 25px #d4af3720;
-    }
-    h1 { color: #d4af37; font-size: 27px; }
-    .subtitle { color: #ddd; margin-bottom: 28px; }
-    label {
-      display: block;
-      text-align: left;
-      margin: 16px 0 7px;
-      color: #f0d675;
-    }
-    input {
-      width: 100%;
-      padding: 13px;
-      border-radius: 8px;
-      border: 1px solid #806b2b;
-      background: #171717;
-      color: white;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 14px;
-      border: 0;
-      border-radius: 8px;
-      background: #d4af37;
-      color: #080808;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .hidden { display: none; }
-    .info {
-      background: #171717;
-      border: 1px solid #806b2b;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 12px;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 22px;
-    }
-    .menu div {
-      background: #171717;
-      border: 1px solid #806b2b;
-      border-radius: 9px;
-      padding: 16px 5px;
-    }
-    .note { color: #aaa; font-size: 12px; margin-top: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SV GROUP School Management System</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080808;color:#fff;font-family:Arial,sans-serif}
+header{padding:22px 16px;text-align:center;border-bottom:1px solid #d4af37}
+header h1{color:#d4af37;margin:0 0 8px}
+header p{margin:5px;color:#ccc}
+main{max-width:800px;margin:auto;padding:18px}
+.card{border:1px solid #6e5922;border-radius:12px;padding:18px;margin-bottom:16px;background:#111}
+h2{color:#e4c65c;margin-top:0}
+label{display:block;color:#e4c65c;margin:12px 0 6px}
+input,select{width:100%;padding:12px;background:#202020;color:white;border:1px solid #665522;border-radius:7px;font-size:16px}
+button{border:0;border-radius:7px;background:#d4af37;color:#080808;padding:12px;font-weight:bold;font-size:15px;cursor:pointer}
+.primary{width:100%;margin-top:16px}
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.menu button{min-height:65px}
+.secondary{background:#292929;color:#fff;border:1px solid #8a7029}
+.hidden{display:none!important}
+.item{padding:12px 0;border-bottom:1px solid #444;overflow-wrap:anywhere}
+.item:last-child{border-bottom:0}
+.small{font-size:13px;color:#bbb}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.actions button{padding:9px}
+.danger{background:#a52c2c;color:#fff}
+</style>
 </head>
 <body>
-  <main class="card" id="setup">
-    <h1>Welcome to SV GROUP</h1>
-    <h2>School Management System</h2>
-    <p class="subtitle">Complete School Administration</p>
+<header>
+<h1>SV GROUP</h1>
+<p>School Management System</p>
+</header>
+<main>
+<section id="setup" class="card hidden">
+<h2>School Setup</h2>
+<form id="schoolForm">
+<label>School Name</label>
+<input id="schoolName" required>
+<label>Principal Name</label>
+<input id="principalName" required>
+<button class="primary">Save School Details</button>
+</form>
+</section>
 
-    <form id="schoolForm">
-      <label for="schoolName">School Name</label>
-      <input id="schoolName" required
-        placeholder="Enter School Name">
+<section id="dashboard" class="hidden">
+<div class="card">
+<h2 id="welcome"></h2>
+<p id="principal"></p>
+<p>कुल विद्यार्थी: <strong id="studentCount">0</strong></p>
+</div>
+<div class="menu">
+<button onclick="openStudents()">👨‍🎓 Students</button>
+<button onclick="comingSoon('Teachers')">👩‍🏫 Teachers</button>
+<button onclick="comingSoon('Attendance')">📅 Attendance</button>
+<button onclick="comingSoon('Fees')">💰 Fees</button>
+<button onclick="comingSoon('Exams & Results')">📝 Results</button>
+<button onclick="comingSoon('Homework')">📚 Homework</button>
+<button onclick="comingSoon('Time Table')">🕒 Time Table</button>
+<button onclick="comingSoon('Reports')">📊 Reports</button>
+</div>
+<button class="secondary" onclick="editSchool()">Edit School Details</button>
+</section>
 
-      <label for="principalName">Principal Name</label>
-      <input id="principalName" required
-        placeholder="Enter Principal Name">
-
-      <button type="submit">CONTINUE TO SCHOOL SYSTEM →</button>
-    </form>
-    <p class="note">SV GROUP • School Management</p>
-  </main>
-
-  <main class="card hidden" id="dashboard">
-    <h1>SV GROUP</h1>
-    <h2 id="displaySchool"></h2>
-    <p>Principal: <span id="displayPrincipal"></span></p>
-    <h2>School Dashboard</h2>
-
-    <div class="menu">
-      <div>👨‍🎓<br>Students</div>
-      <div>👩‍🏫<br>Teachers</div>
-      <div>📅<br>Attendance</div>
-      <div>💰<br>Fees</div>
-      <div>📝<br>Exams & Results</div>
-      <div>📚<br>Homework</div>
-      <div>🕒<br>Time Table</div>
-      <div>📊<br>Reports</div>
-    </div>
-    <p class="note">यह शुरुआती डेमो है। अभी रिकॉर्ड सेव करने वाले मॉड्यूल नहीं जुड़े हैं।</p>
-    <button id="editButton">Edit School Details</button>
-  </main>
-
-  <script>
-    const setup = document.getElementById("setup");
-    const dashboard = document.getElementById("dashboard");
-
-    function showSchool() {
-      const school = localStorage.getItem("svSchoolName");
-      const principal = localStorage.getItem("svPrincipalName");
-
-      if (school && principal) {
-        document.getElementById("displaySchool").textContent = school;
-        document.getElementById("displayPrincipal").textContent = principal;
-        setup.classList.add("hidden");
-        dashboard.classList.remove("hidden");
-      } else {
-        setup.classList.remove("hidden");
-        dashboard.classList.add("hidden");
-      }
-    }
-
-    document.getElementById("schoolForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      const school = document.getElementById("schoolName").value.trim();
-      const principal = document.getElementById("principalName").value.trim();
-
-      if (!school || !principal) return;
-
-      localStorage.setItem("svSchoolName", school);
-      localStorage.setItem("svPrincipalName", principal);
-      showSchool();
-    });
-
-    document.getElementById("editButton").addEventListener("click", function() {
-      document.getElementById("schoolName").value =
-        localStorage.getItem("svSchoolName") || "";
-      document.getElementById("principalName").value =
-        localStorage.getItem("svPrincipalName") || "";
-      setup.classList.remove("hidden");
-      dashboard.classList.add("hidden");
-    });
-
-    showSchool();
-  </script>
+<section id="students" class="hidden">
+<button class="secondary" onclick="showDashboard()">← Dashboard</button>
+<div class="card" style="margin-top:15px">
+<h2>Add Student</h2>
+<form id="studentForm">
+<label>Student Name *</label>
+<input id="sname" required maxlength="100" placeholder="विद्यार्थी का पूरा नाम">
+<label>Class *</label>
+<select id="sclass" required>
+<option value="">कक्षा चुनें</option>
+<option>6</option><option>7</option><option>8</option>
+<option>9</option><option>10</option><option>11</option><option>12</option>
+</select>
+<label>Roll Number *</label>
+<input id="roll" required maxlength="20" placeholder="रोल नंबर">
+<label>Father / Guardian Name</label>
+<input id="guardian" maxlength="100" placeholder="अभिभावक का नाम">
+<label>Contact Number</label>
+<input id="phone" type="tel" inputmode="numeric" maxlength="15" placeholder="मोबाइल नंबर">
+<button class="primary">Save Student</button>
+</form>
+</div>
+<div class="card">
+<h2>Student Records</h2>
+<input id="search" placeholder="नाम, कक्षा या रोल नंबर खोजें">
+<div id="studentList"></div>
+<p id="empty" class="small">अभी कोई विद्यार्थी नहीं जोड़ा गया है।</p>
+</div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
+let students=read("svSchoolStudents",[]);
+if(!Array.isArray(students)) students=[];
+function show(id){
+["setup","dashboard","students"].forEach(x=>$(x).classList.add("hidden"));
+$(id).classList.remove("hidden");
+}
+function init(){
+const school=localStorage.getItem("svSchoolName");
+const principal=localStorage.getItem("svPrincipalName");
+if(school&&principal){
+$("welcome").textContent=school;
+$("principal").textContent="Principal: "+principal;
+show("dashboard");
+}else{
+$("schoolName").value=school||"";
+$("principalName").value=principal||"";
+show("setup");
+}
+updateCount();
+}
+$("schoolForm").addEventListener("submit",e=>{
+e.preventDefault();
+localStorage.setItem("svSchoolName",$("schoolName").value.trim());
+localStorage.setItem("svPrincipalName",$("principalName").value.trim());
+init();
+});
+function editSchool(){
+$("schoolName").value=localStorage.getItem("svSchoolName")||"";
+$("principalName").value=localStorage.getItem("svPrincipalName")||"";
+show("setup");
+}
+function showDashboard(){show("dashboard");updateCount()}
+function openStudents(){show("students");renderStudents()}
+function comingSoon(name){alert(name+" मॉड्यूल अभी बनाना बाकी है।")}
+function saveStudents(){
+localStorage.setItem("svSchoolStudents",JSON.stringify(students));
+}
+function updateCount(){$("studentCount").textContent=students.length}
+$("studentForm").addEventListener("submit",e=>{
+e.preventDefault();
+const student={
+id:Date.now().toString()+Math.random().toString(36).slice(2,7),
+name:$("sname").value.trim(),
+cls:$("sclass").value,
+roll:$("roll").value.trim(),
+guardian:$("guardian").value.trim(),
+phone:$("phone").value.trim()
+};
+if(!student.name||!student.cls||!student.roll)return;
+const duplicate=students.some(s=>s.cls===student.cls&&s.roll.toLowerCase()===student.roll.toLowerCase());
+if(duplicate){alert("इस कक्षा में यह रोल नंबर पहले से मौजूद है।");return}
+students.push(student);
+saveStudents();
+$("studentForm").reset();
+renderStudents();
+updateCount();
+alert("विद्यार्थी सफलतापूर्वक सेव हो गया!");
+});
+$("search").addEventListener("input",renderStudents);
+function renderStudents(){
+const q=$("search").value.trim().toLowerCase();
+const list=$("studentList");
+list.replaceChildren();
+const filtered=students.filter(s=>
+[s.name,s.cls,s.roll,s.guardian,s.phone].some(v=>(v||"").toLowerCase().includes(q))
+);
+$("empty").classList.toggle("hidden",filtered.length>0);
+if(filtered.length===0){
+$("empty").textContent=students.length?"कोई मिलान वाला रिकॉर्ड नहीं मिला।":"अभी कोई विद्यार्थी नहीं जोड़ा गया है।";
+}
+filtered.forEach(s=>{
+const item=document.createElement("div");
+item.className="item";
+const title=document.createElement("strong");
+title.textContent=s.name;
+const detail=document.createElement("p");
+detail.className="small";
+detail.textContent="कक्षा: "+s.cls+" | रोल नंबर: "+s.roll+
+(s.guardian?" | अभिभावक: "+s.guardian:"")+
+(s.phone?" | संपर्क: "+s.phone:"");
+const actions=document.createElement("div");
+actions.className="actions";
+const del=document.createElement("button");
+del.className="danger";
+del.textContent="Delete";
+del.addEventListener("click",()=>{
+if(confirm("क्या इस विद्यार्थी का रिकॉर्ड हटाना चाहते हैं?")){
+students=students.filter(x=>x.id!==s.id);
+saveStudents();renderStudents();updateCount();
+}
+});
+actions.appendChild(del);
+item.append(title,detail,actions);
+list.appendChild(item);
+});
+}
+init();
+</script>
 </body>
 </html>
